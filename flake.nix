@@ -89,7 +89,13 @@
               ]
             );
 
-        tex = pkgs.texlive.combined.scheme-full;
+        tex = (pkgs.texlive.combine {
+          inherit (pkgs.texlive) scheme-basic
+            amsmath babel-english cbfonts-fd cm-super count1to ctex doublestroke dvisvgm everysel
+            fontspec frcursive fundus-calligra gnu-freefont jknapltx latex-bin
+            mathastext microtype multitoc physics preview prelim2e ragged2e relsize rsfs
+            setspace standalone tipa wasy wasysym xcolor xetex xkeyval;
+        });
 
       in
       {
