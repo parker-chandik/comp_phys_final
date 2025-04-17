@@ -1,0 +1,3 @@
+# hiding direnv stuff bc individual users can set up if they would like
+.envrc
+.direnv
