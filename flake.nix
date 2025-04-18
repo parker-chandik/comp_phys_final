@@ -73,7 +73,9 @@
         pkgs = nixpkgs.legacyPackages.${system};
 
         # Use Python 3.12 from nixpkgs
-        python = pkgs.python312;
+        python = pkgs.python312.withPackages(ps: with ps; [
+          python-lsp-server 
+        ]);
 
         # Construct package set
         pythonSet =
