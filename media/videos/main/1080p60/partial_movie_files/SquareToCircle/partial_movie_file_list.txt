@@ -1,4 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:/Users/parkerchandik/Desktop/Tufts/2024-2025/sem2/PHY118_CompPhysics/comp_phys_final/media/videos/main/1080p60/partial_movie_files/SquareToCircle/3529212410_2631387112_223132457.mp4'
-file 'file:/Users/parkerchandik/Desktop/Tufts/2024-2025/sem2/PHY118_CompPhysics/comp_phys_final/media/videos/main/1080p60/partial_movie_files/SquareToCircle/3040924799_2619426269_557880437.mp4'
-file 'file:/Users/parkerchandik/Desktop/Tufts/2024-2025/sem2/PHY118_CompPhysics/comp_phys_final/media/videos/main/1080p60/partial_movie_files/SquareToCircle/3040924799_2956010123_557880437.mp4'
