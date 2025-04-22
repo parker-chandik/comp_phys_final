@@ -21,13 +21,14 @@ l = 2.0
 
 # 2nd order Euler
 # def update_pendulum(theta, dtheta, dt):
-#     a = - (g / l) * np.sin(theta)
+#     a = - (g / l) * np.sin(theta[-1])
 
-#     theta_new = theta + dtheta * dt + 0.5 * a * dt**2 
-#     dtheta_new = dtheta + a * dt
+#     theta_new = theta[-1] + dtheta[-1] * dt + 0.5 * a * dt**2 
+#     dtheta_new = dtheta[-1] + a * dt
 
 #     return theta_new, dtheta_new
 
+# bashforth adams
 def update_pendulum(theta, dtheta, dt):
     theta_new = theta[-1] + 1.5 * dt * dtheta[-1] - 0.5 * dt * dtheta[-2]
     dtheta_new = dtheta[-1] + 1.5 * dt * (-g/l) * np.sin(theta[-1]) - 0.5 * dt * (-g/l) * np.sin(theta[-2])
