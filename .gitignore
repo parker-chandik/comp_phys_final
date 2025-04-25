@@ -1,3 +1,6 @@
 # hiding direnv stuff bc individual users can set up if they would like
 .envrc
 .direnv
+
+# users have their own caches
+__pycache__

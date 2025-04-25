@@ -73,9 +73,9 @@
         pkgs = nixpkgs.legacyPackages.${system};
 
         # Use Python 3.12 from nixpkgs
-        python = pkgs.python312.withPackages(ps: with ps; [
-          python-lsp-server 
-        ]);
+        python = pkgs.python312; # .withPackages (ps: with ps; [
+        #   python-lsp-server 
+        # ]);
 
         # Construct package set
         pythonSet =
@@ -123,6 +123,9 @@
           pkgs.mkShell {
             packages = [
               python
+              pkgs.ruff
+              pkgs.basedpyright
+              
               pkgs.uv
               pkgs.pkg-config
               pkgs.cairo
