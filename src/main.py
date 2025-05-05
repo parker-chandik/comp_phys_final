@@ -14,6 +14,7 @@ from manim import (
     linear,
     TracedPath,
     VMobject,
+    ManimColor,
 )
 
 # rendering constants
@@ -32,7 +33,7 @@ dtheta1_i, dtheta2_i = 0.0, 0.0
 
 
 class DoublePendulum(VMobject):
-    def __init__(self, theta1_i, theta2_i, **kwargs):
+    def __init__(self, theta1_i, theta2_i, color, **kwargs):
         VMobject.__init__(self, **kwargs)
 
         # values to keep track of
@@ -46,9 +47,22 @@ class DoublePendulum(VMobject):
         self.dtheta2 = ValueTracker(dtheta2_i)
         self.hist_dtheta2 = [self.dtheta2.get_value()]
 
+        # update function called once per frame
+        def custom_update(self, **kwargs):
+            update_pendulum(
+                self.hist_theta1, self.hist_dtheta1, self.hist_theta2, self.hist_dtheta2
+            )
+
+            self.theta1.set_value(self.hist_theta1[-1])
+            self.theta2.set_value(self.hist_theta2[-1])
+
+            self.dtheta1.set_value(self.hist_dtheta1[-1])
+            self.dtheta2.set_value(self.hist_dtheta2[-1])
+
+        self.add_updater(custom_update)
+
         # draw mass and arm
         self.mass1 = Dot()
-        self.add_updater(self.custom_update)
         self.mass1.add_updater(
             lambda mob: mob.move_to(
                 (l1 * np.sin(self.theta1.get_value())) * RIGHT
@@ -58,41 +72,43 @@ class DoublePendulum(VMobject):
 
         self.add(self.mass1)
 
-    #     self.mass2 = Dot()
-    #     self.mass2.add_updater(
-    #         lambda mob: mob.move_to(
-    #             self.mass1.get_center()
-    #             + (l2 * np.sin(self.theta2.get_value())) * RIGHT
-    #             + (l2 * np.cos(self.theta2.get_value())) * DOWN
-    #         )
-    #     )
+        self.mass2 = Dot()
+        self.mass2.add_updater(
+            lambda mob: mob.move_to(
+                self.mass1.get_center()
+                + (l2 * np.sin(self.theta2.get_value())) * RIGHT
+                + (l2 * np.cos(self.theta2.get_value())) * DOWN
+            )
+        )
 
-    #     self.add(self.mass2)
+        self.add(self.mass2)
 
-    #     self.trace = TracedPath(self.mass2.get_start)
-    #     self.add(self.trace)
+        self.trace = TracedPath(
+            self.mass2.get_start, stroke_color=ManimColor(color), dissipating_time=2.0
+        )
+        self.add(self.trace)
 
-    #     self.origin = Dot()
+        self.origin = Dot()
 
-    #     self.line1 = Line()
-    #     self.line1.add_updater(
-    #         lambda mob: mob.put_start_and_end_on(
-    #             self.origin.get_center(), self.mass1.get_center()
-    #         )
-    #     )
-    #     self.line2 = Line()
-    #     self.line2.add_updater(
-    #         lambda mob: mob.put_start_and_end_on(
-    #             self.mass1.get_center(), self.mass2.get_center()
-    #         )
-    #     )
+        self.line1 = Line()
+        self.line1.add_updater(
+            lambda mob: mob.put_start_and_end_on(
+                self.origin.get_center(), self.mass1.get_center()
+            )
+        )
+        self.line2 = Line()
+        self.line2.add_updater(
+            lambda mob: mob.put_start_and_end_on(
+                self.mass1.get_center(), self.mass2.get_center()
+            )
+        )
 
-    #     self.add(self.line1, self.line2, self.origin)
+        self.add(self.line1, self.line2, self.origin)
 
     # update function called once per frame
-    def custom_update(self, **kwargs):
-        print("hi")
-        # update_pendulum(
+    # def custom_update(self, dt, **kwargs):
+    #     print("hi")
+    # update_pendulum(
 
     #     self.hist_theta1, self.hist_dtheta1, self.hist_theta2, self.hist_dtheta2
     # )
@@ -238,8 +254,10 @@ class Simulation(MovingCameraScene):
         # trace = TracedPath(mass2.get_start)
         # self.add(trace)
 
-        pend1 = DoublePendulum(theta1_i, theta2_i)
+        pend1 = DoublePendulum(theta1_i, theta2_i, "#ffffff")
         self.add(pend1)
+        pend2 = DoublePendulum(0.75 * np.pi, 0.75 * np.pi, "#ffa200")
+        self.add(pend2)
         # line1 = Line()
         # line1.add_updater(
         #     lambda mob: mob.put_start_and_end_on(
