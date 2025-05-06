@@ -22,9 +22,9 @@ import random
 runtime = 60.0  # runtime of animation
 simulation_time = 90.0  # time experienced by simulation
 dt = simulation_time / (config.frame_rate * runtime)
-# dissipate_after = 1.0
+dissipate_after = -1.0  # -1.0 for no dissipation
 num_pends = 5
-mode = "single"  # sequenced or random
+mode = "single"  # sequential, random, single
 
 # physical constants
 g = 9.81
@@ -138,7 +138,7 @@ class DoublePendulum(VMobject):
         self.trace = TracedPath(
             self.mass2.get_start,
             stroke_color=ManimColor(color),
-            # dissipating_time=dissipate_after,
+            dissipating_time=(dissipate_after if (dissipate_after != -1.0) else None),
         )
         self.add(self.trace)
 
@@ -178,7 +178,7 @@ class Simulation(MovingCameraScene):
         match mode:
             case "sequential":
                 for i in range(num_pends):
-                    color = hex(random.randrange(0, 2**24))
+                    color = hex(int((theta1_i + i * 0.00075) / (2 * np.pi) * 2**24))
                     pend = DoublePendulum(
                         theta1_i + i * 0.01, theta2_i + i * 0.01, str(color)
                     )
